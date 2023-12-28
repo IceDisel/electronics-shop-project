@@ -1,4 +1,6 @@
 """Здесь надо написать тесты с использованием pytest для модуля item."""
+from unittest.mock import patch
+
 import pytest
 
 from src.item import Item
@@ -35,3 +37,39 @@ def test_price_discount(product: Item):
     assert product.calculate_total_price() == 10000
     product.apply_discount()
     assert product.calculate_total_price() == 5000
+
+
+def test_name(product):
+    """
+    Тестирование сеттера name
+    """
+    product.name = "СуперТелефон"
+    assert product.name == "СуперТелеф"
+    product.name = "Телефон"
+    assert product.name == "Телефон"
+
+
+def test_string_to_number(product: Item) -> None:
+    """
+    Тестирование статик метода возвращающий число из числа-строки
+    """
+    assert product.string_to_number('5') == 5
+    assert product.string_to_number('5.0') == 5
+    assert product.string_to_number('5.5') == 5
+    assert product.string_to_number('abc') is None
+
+
+def test_instantiate_from_csv():
+
+    Item.instantiate_from_csv('src/items.csv')
+
+    assert len(Item.all) == 9
+    assert Item.all[0].name == 'Смартфон'
+    assert Item.all[0].price == 10000
+    assert Item.all[0].quantity == 20
+    assert Item.all[1].name == 'Смартфон'
+    assert Item.all[1].price == 5000.0
+    assert Item.all[1].quantity == 20
+    assert Item.all[2].name == 'Телефон'
+    assert Item.all[2].price == 10000
+    assert Item.all[2].quantity == 20
