@@ -1,5 +1,4 @@
 """Здесь надо написать тесты с использованием pytest для модуля item."""
-from unittest.mock import patch
 
 import pytest
 
@@ -60,7 +59,6 @@ def test_string_to_number(product: Item) -> None:
 
 
 def test_instantiate_from_csv():
-
     Item.instantiate_from_csv('src/items.csv')
 
     assert len(Item.all) == 9
@@ -73,3 +71,8 @@ def test_instantiate_from_csv():
     assert Item.all[2].name == 'Телефон'
     assert Item.all[2].price == 10000
     assert Item.all[2].quantity == 20
+
+
+def test_str_and_repr(product):
+    assert repr(product) == "Item('Смартфон', 10000, 20)"
+    assert str(product) == 'Смартфон'
