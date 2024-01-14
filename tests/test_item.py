@@ -76,3 +76,10 @@ def test_instantiate_from_csv():
 def test_str_and_repr(product):
     assert repr(product) == "Item('Смартфон', 10000, 20)"
     assert str(product) == 'Смартфон'
+
+
+def test__add__(product):
+    """
+    Тестирование сложения количества товаров
+    """
+    assert product + product == 40
