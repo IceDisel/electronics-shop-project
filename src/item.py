@@ -28,7 +28,12 @@ class Item:
         return f"{self.__class__.__name__}('{self.__name}', {self.price}, {self.quantity})"
 
     def __add__(self, other):
-        return self.quantity + other.quantity
+        try:
+            if not isinstance(other, self.__class__):
+                raise TypeError("Невозможно выполнить сложение с разными типами")
+            return self.quantity + other.quantity
+        except TypeError as e:
+            return str(e)
 
     @property
     def name(self):
