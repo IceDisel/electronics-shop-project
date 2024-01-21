@@ -1,4 +1,5 @@
 import csv
+import os
 
 
 class Item:
@@ -54,14 +55,24 @@ class Item:
         return self.price
 
     @classmethod
-    def instantiate_from_csv(cls, filename):
+    def instantiate_from_csv(cls, filename=''):
         """
         Класс-метод, инициализирующий экземпляры класса Item данными из файла
         """
-        with open(filename, mode='r') as file:
-            data = csv.DictReader(file)
-            for row in data:
-                cls(row['name'], float(row['price']), int(row['quantity']))
+        try:
+            if not os.path.exists(filename):
+                raise FileNotFoundError(f"Отсутствует файл {os.path.basename(filename)}")
+            with open(filename, mode='r') as file:
+                data = csv.DictReader(file)
+
+                for row in data:
+                    if not ('name' in row and 'price' in row and 'quantity' in row) or None in row.values():
+                        raise InstantiateCSVError(f"Файл {os.path.basename(filename)} поврежден")
+
+                    cls(row['name'], float(row['price']), int(row['quantity']))
+
+        except (FileNotFoundError, KeyError, ValueError, InstantiateCSVError) as e:
+            print(type(e).__name__ + ": " + str(e))
 
     @staticmethod
     def string_to_number(string: str) -> int | None:
@@ -79,3 +90,11 @@ class Item:
         Применяет установленную скидку для конкретного товара.
         """
         self.price *= self.pay_rate
+
+
+class InstantiateCSVError(Exception):
+    def __init__(self, message=''):
+        self.message = message
+
+    def __str__(self):
+        return self.message
