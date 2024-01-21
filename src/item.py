@@ -72,7 +72,9 @@ class Item:
                     cls(row['name'], float(row['price']), int(row['quantity']))
 
         except (FileNotFoundError, KeyError, ValueError, InstantiateCSVError) as e:
-            print(type(e).__name__ + ": " + str(e))
+            error = (type(e).__name__ + ": " + str(e))
+            print(error)
+            return error
 
     @staticmethod
     def string_to_number(string: str) -> int | None:

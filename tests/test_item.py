@@ -73,6 +73,14 @@ def test_instantiate_from_csv():
     assert Item.all[2].quantity == 20
 
 
+def test_instantiate_from_csv_file_not_found():
+    assert Item.instantiate_from_csv('items.csv') == "FileNotFoundError: Отсутствует файл items.csv"
+
+
+def test_instantiate_from_csv_file_invalid():
+    assert Item.instantiate_from_csv('tests/test_items.csv') == "InstantiateCSVError: Файл test_items.csv поврежден"
+
+
 def test_str_and_repr(product):
     assert repr(product) == "Item('Смартфон', 10000, 20)"
     assert str(product) == 'Смартфон'
